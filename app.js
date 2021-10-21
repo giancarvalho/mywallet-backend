@@ -1,10 +1,24 @@
 import express from "express";
 import cors from "cors";
-import bcrypt from "bcrypt";
+import { pool } from "./db/pool.js";
+import { signUp } from "./controllers/signUp.js";
 
+const PORT = 4000;
 const app = express();
 app.use(cors());
-const PORT = 4000;
+app.use(express.json());
 
-app.get("/", (req, res) => res.send("Hello World!"));
+app.get("/entries", async (req, res) => {
+    try {
+        const results = await pool.query("SELECT * FROM entries;");
+
+        res.send(results.rows);
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+});
+
+app.post("/sign-up", signUp);
+
 app.listen(PORT);
