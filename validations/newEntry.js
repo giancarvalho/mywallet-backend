@@ -17,7 +17,7 @@ const newEntrySchema = Joi.object({
     description: Joi.string().min(3).required(),
     amount: Joi.number().required(),
     date: Joi.date(),
-    type: Joi.string().required(),
+    type: Joi.string().valid("expense", "income").required(),
 });
 
 export { validateNewEntry };
