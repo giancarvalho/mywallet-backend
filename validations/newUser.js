@@ -29,7 +29,6 @@ async function validateNewUser(userData) {
 
         return validation;
     } catch (error) {
-        console.log(error);
         validation.isInvalid = true;
         validation.errorCode = 500;
         validation.errorMessage = "Unknown error";

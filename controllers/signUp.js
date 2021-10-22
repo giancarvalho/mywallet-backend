@@ -7,8 +7,6 @@ async function signUp(req, res) {
     const validation = await validateNewUser(userData);
 
     try {
-        console.log(validation);
-
         if (validation.isInvalid) {
             throw validation.errorCode;
         }
