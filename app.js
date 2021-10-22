@@ -3,6 +3,7 @@ import cors from "cors";
 import { pool } from "./db/pool.js";
 import { signUp } from "./controllers/signUp.js";
 import { signIn } from "./controllers/signIn.js";
+import { newEntry } from "./controllers/newEntry.js";
 
 const PORT = 4000;
 const app = express();
@@ -23,5 +24,7 @@ app.get("/entries", async (req, res) => {
 app.post("/sign-up", signUp);
 
 app.post("/sign-in", signIn);
+
+app.post("/entries", newEntry);
 
 app.listen(PORT);
