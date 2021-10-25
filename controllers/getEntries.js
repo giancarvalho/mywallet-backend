@@ -1,7 +1,7 @@
 import { pool } from "../db/pool.js";
 
 async function getEntries(req, res) {
-    const token = req.headers.authorization.replace("Bearer ", "");
+    const token = req.headers.authorization?.replace("Bearer ", "");
     if (!token) return res.sendStatus(401);
 
     try {
@@ -11,7 +11,7 @@ async function getEntries(req, res) {
         );
 
         const results = await pool.query(
-            `SELECT description, date, type, cast(amount / 100.0 AS decimal(10,2)) AS amount FROM entries WHERE "userId" = $1;`,
+            `SELECT entries.description, entries.date, entries.type, cast(entries.amount / 100.0 AS decimal(10,2)) AS amount, users.name as username FROM entries JOIN users ON entries."userId"=users.id WHERE "userId" = $1;`,
             [userSearch.rows[0].userId]
         );
 

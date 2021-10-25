@@ -11,7 +11,7 @@ async function signIn(req, res) {
         }
 
         const userSearch = await pool.query(
-            `SELECT users.id, passwords.password FROM users JOIN passwords ON users.id=passwords."userId" WHERE email = $1;
+            `SELECT users.id, users.name, passwords.password FROM users JOIN passwords ON users.id=passwords."userId" WHERE email = $1;
 `,
             [userData.email]
         );
@@ -48,7 +48,7 @@ async function signIn(req, res) {
             );
         }
 
-        res.send(userToken);
+        res.send({ name: user.name, token: userToken });
     } catch (error) {
         res.sendStatus(500);
     }

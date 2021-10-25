@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import { validateNewEntry } from "../validations/newEntry.js";
 
 async function newEntry(req, res) {
-    const token = req.headers.authorization.replace("Bearer ", "");
+    const token = req.headers.authorization?.replace("Bearer ", "");
     if (!token) return res.sendStatus(401);
     const entryData = req.body;
     const validation = validateNewEntry(entryData);
@@ -32,7 +32,6 @@ async function newEntry(req, res) {
         if (validation.isInvalid)
             return res.status(error).send(validation.errorMessage);
 
-        console.log(error);
         res.sendStatus(500);
     }
 }
