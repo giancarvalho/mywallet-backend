@@ -17,7 +17,6 @@ async function getEntries(req, res) {
 
         res.send(results.rows);
     } catch (error) {
-        console.log(error);
         res.sendStatus(500);
     }
 }
