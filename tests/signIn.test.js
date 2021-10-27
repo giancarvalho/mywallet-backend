@@ -6,20 +6,16 @@ import bcrypt from "bcrypt";
 describe("GET /sign-in", () => {
     let id;
     beforeAll(async () => {
-        try {
-            id = (
-                await pool.query(
-                    "INSERT INTO users (name, email) VALUES ('teste', 'test@test.com') RETURNING id;"
-                )
-            ).rows[0].id;
-
+        id = (
             await pool.query(
-                `INSERT INTO passwords ("userId", password) VALUES ($1, $2)`,
-                [id, bcrypt.hashSync("123456", 10)]
-            );
-        } catch (error) {
-            console.log(error);
-        }
+                "INSERT INTO users (name, email) VALUES ('teste', 'test@test.com') RETURNING id;"
+            )
+        ).rows[0].id;
+
+        await pool.query(
+            `INSERT INTO passwords ("userId", password) VALUES ($1, $2)`,
+            [id, bcrypt.hashSync("123456", 10)]
+        );
     });
 
     afterAll(async () => {
@@ -46,7 +42,7 @@ describe("GET /sign-in", () => {
         expect(result.status).toEqual(404);
     });
 
-    it("should get an object properties token and name if credentials are valid", async () => {
+    it("should get an object with properties token and name if credentials are valid", async () => {
         const body = {
             email: "test@test.com",
             password: "123456",
