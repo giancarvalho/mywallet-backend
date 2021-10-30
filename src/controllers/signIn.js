@@ -1,6 +1,5 @@
 import bcrypt from "bcrypt";
 import { v4 as tokenGenerator } from "uuid";
-import { pool } from "../db/pool.js";
 import { findToken, createToken } from "../db/queries/tokens.js";
 import { findUser } from "../db/queries/users.js";
 

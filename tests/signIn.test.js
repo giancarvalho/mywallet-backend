@@ -1,18 +1,13 @@
 import supertest from "supertest";
 import app from "../src/app";
-
+import generateUserData from "../src/factories/userFactory";
 import { createUser, deleteUser } from "../src/db/queries/users";
-import faker from "faker";
 
 describe("GET /sign-in", () => {
     let id;
     let user;
     beforeAll(async () => {
-        user = {
-            name: faker.name.findName(),
-            password: faker.internet.password(),
-            email: faker.internet.email(),
-        };
+        user = generateUserData();
         id = await createUser(user);
     });
 
@@ -28,10 +23,7 @@ describe("GET /sign-in", () => {
     });
 
     it("should return 404 if credentials are not found", async () => {
-        const body = {
-            email: faker.internet.email(),
-            password: faker.internet.password(),
-        };
+        const body = generateUserData();
         const result = await supertest(app).post("/sign-in").send(body);
 
         expect(result.status).toEqual(404);

@@ -8,7 +8,6 @@ async function createUser(user) {
             [user.name, user.email]
         )
     ).rows[0].id;
-    console.log(user);
 
     await pool.query(
         `INSERT INTO passwords ("userId", password) VALUES ($1, $2)`,
