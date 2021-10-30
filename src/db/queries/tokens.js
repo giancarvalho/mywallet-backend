@@ -1,6 +1,6 @@
 import { pool } from "../pool.js";
 
-async function findToken(query) {
+async function getTokenData(query) {
     const filter = Number(query) ? `"userId"` : "token";
 
     const result = await pool.query(
@@ -18,4 +18,4 @@ async function createToken(id, token) {
     ]);
 }
 
-export { findToken, createToken };
+export { getTokenData, createToken };

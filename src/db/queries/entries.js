@@ -9,4 +9,13 @@ async function searchEntries(id) {
     return result;
 }
 
-export { searchEntries };
+async function createEntry(id, entryData) {
+    let { description, amount, date, type } = entryData;
+
+    await pool.query(
+        `INSERT INTO entries ("userId", description, amount, date, type) VALUES ($1, $2, $3, $4, $5);`,
+        [id, description, amount * 100, date, type]
+    );
+}
+
+export { searchEntries, createEntry };

@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import { v4 as tokenGenerator } from "uuid";
-import { findToken, createToken } from "../db/queries/tokens.js";
+import { getTokenData, createToken } from "../db/queries/tokens.js";
 import { findUser } from "../db/queries/users.js";
 
 async function signIn(req, res) {
@@ -28,7 +28,7 @@ async function signIn(req, res) {
             return res.status(400).send("Wrong password");
         }
 
-        const tokenSearch = await findToken(user.id);
+        const tokenSearch = await getTokenData(user.id);
 
         let userToken;
 
