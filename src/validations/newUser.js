@@ -1,7 +1,6 @@
 import Joi from "joi";
-import { pool } from "../db/pool.js";
 import { findUser } from "../db/queries/users.js";
-import generateErrorMessage from "../factories/validationMessageFactory.js";
+import generateErrorMessage from "../factories/errorMessageFactory.js";
 
 async function validateNewUser(userData) {
     const joiValidation = userSchema.validate(userData);
