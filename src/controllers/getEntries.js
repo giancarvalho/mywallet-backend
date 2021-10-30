@@ -8,6 +8,10 @@ async function getEntries(req, res) {
     try {
         const userSearch = await getTokenData(token);
 
+        console.log(userSearch);
+
+        if (userSearch.rowCount === 0) return res.sendStatus(401);
+
         const results = await searchEntries(userSearch.rows[0].userId);
 
         res.send(results.rows);

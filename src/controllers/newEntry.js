@@ -14,6 +14,8 @@ async function newEntry(req, res) {
 
         const userSearch = await getTokenData(token);
 
+        if (userSearch.rowCount === 0) return res.sendStatus(401);
+
         let { date } = entryData;
 
         if (!date) {
