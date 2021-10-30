@@ -1,6 +1,5 @@
-import { pool } from "../db/pool.js";
 import { validateNewUser } from "../validations/newUser.js";
-import bcrypt from "bcrypt";
+import { createUser } from "../db/queries/users.js";
 
 async function signUp(req, res) {
     const userData = req.body;
@@ -11,17 +10,7 @@ async function signUp(req, res) {
             throw validation.errorCode;
         }
 
-        const result = await pool.query(
-            "INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id;",
-            [userData.name, userData.email]
-        );
-
-        const hash = bcrypt.hashSync(userData.password, 10);
-
-        await pool.query(
-            `INSERT INTO passwords ("userId", password) VALUES ($1, $2);`,
-            [result.rows[0].id, hash]
-        );
+        await createUser(userData);
 
         return res.sendStatus(201);
     } catch (error) {

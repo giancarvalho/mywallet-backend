@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import { v4 as tokenGenerator } from "uuid";
-import { pool } from "../db/pool.js";
+import { getTokenData, createToken } from "../db/queries/tokens.js";
+import { findUser } from "../db/queries/users.js";
 
 async function signIn(req, res) {
     const userData = req.body;
@@ -10,11 +11,7 @@ async function signIn(req, res) {
             return res.sendStatus(400);
         }
 
-        const userSearch = await pool.query(
-            `SELECT users.id, users.name, passwords.password FROM users JOIN passwords ON users.id=passwords."userId" WHERE email = $1;
-`,
-            [userData.email]
-        );
+        const userSearch = await findUser(userData.email);
 
         if (userSearch.rowCount === 0) {
             return res.sendStatus(404);
@@ -31,10 +28,7 @@ async function signIn(req, res) {
             return res.status(400).send("Wrong password");
         }
 
-        const tokenSearch = await pool.query(
-            `SELECT token FROM tokens WHERE "userId" = $1;`,
-            [user.id]
-        );
+        const tokenSearch = await getTokenData(user.id);
 
         let userToken;
 
@@ -42,10 +36,8 @@ async function signIn(req, res) {
             userToken = tokenSearch.rows[0].token;
         } else {
             userToken = tokenGenerator();
-            await pool.query(
-                `INSERT INTO tokens ("userId", token) VALUES ($1, $2)`,
-                [user.id, userToken]
-            );
+
+            await createToken(user.id, userToken);
         }
 
         res.send({ name: user.name, token: userToken });

@@ -1,13 +1,15 @@
 import Joi from "joi";
+import generateErrorMessage from "../factories/errorMessageFactory.js";
 
 function validateNewEntry(entryData) {
     const joiValidation = newEntrySchema.validate(entryData);
-    const validation = { isInvalid: false, errorCode: null, errorMessage: "" };
+    let validation = { isInvalid: false };
 
     if (joiValidation.error) {
-        validation.isInvalid = true;
-        validation.errorCode = 400;
-        validation.errorMessage = joiValidation.error.details[0].message;
+        validation = generateErrorMessage(
+            400,
+            joiValidation.error.details[0].message
+        );
     }
 
     return validation;

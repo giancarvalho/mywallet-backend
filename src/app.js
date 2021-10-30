@@ -1,9 +1,9 @@
 import express from "express";
 import cors from "cors";
-import { signUp } from "../controllers/signUp.js";
-import { signIn } from "../controllers/signIn.js";
-import { newEntry } from "../controllers/newEntry.js";
-import { getEntries } from "../controllers/getEntries.js";
+import { signUp } from "./controllers/signUp.js";
+import { signIn } from "./controllers/signIn.js";
+import { newEntry } from "./controllers/newEntry.js";
+import { getEntries } from "./controllers/getEntries.js";
 
 const app = express();
 app.use(cors());

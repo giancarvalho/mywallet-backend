@@ -1,6 +1,7 @@
-import { pool } from "../db/pool.js";
 import dayjs from "dayjs";
 import { validateNewEntry } from "../validations/newEntry.js";
+import { getTokenData } from "../db/queries/tokens.js";
+import { createEntry } from "../db/queries/entries.js";
 
 async function newEntry(req, res) {
     const token = req.headers.authorization?.replace("Bearer ", "");
@@ -11,21 +12,18 @@ async function newEntry(req, res) {
     try {
         if (validation.isInvalid) throw validation.errorCode;
 
-        const userSearch = await pool.query(
-            `SELECT tokens."userId" FROM tokens WHERE tokens.token = $1;`,
-            [token]
-        );
+        const userSearch = await getTokenData(token);
 
-        let { description, amount, date, type } = entryData;
+        if (userSearch.rowCount === 0) return res.sendStatus(401);
+
+        let { date } = entryData;
 
         if (!date) {
             date = dayjs().format("DD-MM-YYYY");
+            entryData.date = date;
         }
 
-        await pool.query(
-            `INSERT INTO entries ("userId", description, amount, date, type) VALUES ($1, $2, $3, $4, $5);`,
-            [userSearch.rows[0].userId, description, amount * 100, date, type]
-        );
+        await createEntry(userSearch.rows[0].userId, entryData);
 
         res.sendStatus(201);
     } catch (error) {
