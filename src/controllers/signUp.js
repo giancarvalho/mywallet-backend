@@ -29,8 +29,6 @@ async function signUp(req, res) {
             return res.status(error).send(validation.errorMessage);
         }
 
-        console.log(error);
-
         return res.sendStatus(500);
     }
 }

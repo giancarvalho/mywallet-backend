@@ -1,5 +1,5 @@
 import supertest from "supertest";
-import { pool } from "../db/pool";
+import { pool } from "../src/db/pool";
 import app from "../src/app";
 import bcrypt from "bcrypt";
 
