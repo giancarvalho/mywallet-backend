@@ -2,6 +2,7 @@ import supertest from "supertest";
 import app from "../src/app";
 import generateUserData from "../src/factories/userFactory";
 import { createUser, deleteUser } from "../src/db/queries/users";
+import { pool } from "../src/db/pool";
 
 describe("GET /sign-in", () => {
     let id;

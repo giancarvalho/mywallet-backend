@@ -1,4 +1,4 @@
-import { pool } from "../pool";
+import { pool } from "../pool.js";
 import bcrypt from "bcrypt";
 
 async function createUser(user) {
@@ -9,9 +9,10 @@ async function createUser(user) {
         )
     ).rows[0].id;
 
+    const userHash = bcrypt.hashSync(user.password, 10);
     await pool.query(
         `INSERT INTO passwords ("userId", password) VALUES ($1, $2)`,
-        [id, bcrypt.hashSync(user.password, 10)]
+        [id, userHash]
     );
 
     return id;
