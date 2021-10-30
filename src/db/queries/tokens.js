@@ -1,9 +1,11 @@
 import { pool } from "../pool.js";
 
-async function findToken(id) {
+async function findToken(query) {
+    const filter = Number(query) ? `"userId"` : "token";
+
     const result = await pool.query(
-        `SELECT token FROM tokens WHERE "userId" = $1;`,
-        [id]
+        `SELECT * FROM tokens WHERE ${filter} = $1;`,
+        [query]
     );
 
     return result;
