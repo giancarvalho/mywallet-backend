@@ -19,7 +19,7 @@ async function newEntry(req, res) {
         let { date } = entryData;
 
         if (!date) {
-            date = dayjs().format("DD-MM-YYYY");
+            date = dayjs().format("YYYY-MM-DD");
             entryData.date = date;
         }
 
