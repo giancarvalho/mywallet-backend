@@ -1,9 +1,8 @@
 const settings = {
-    user: "postgres",
-    password: "123456",
-    host: "localhost",
-    port: 5432,
-    database: "meubanco",
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false,
+    },
 };
 
 export default settings;
