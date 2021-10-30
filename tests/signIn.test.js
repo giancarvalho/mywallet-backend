@@ -1,32 +1,27 @@
 import supertest from "supertest";
-import { pool } from "../src/db/pool";
 import app from "../src/app";
-import bcrypt from "bcrypt";
+
+import { createUser, deleteUser } from "../src/db/queries/users";
+import faker from "faker";
 
 describe("GET /sign-in", () => {
     let id;
+    let user;
     beforeAll(async () => {
-        id = (
-            await pool.query(
-                "INSERT INTO users (name, email) VALUES ('teste', 'test@test.com') RETURNING id;"
-            )
-        ).rows[0].id;
-
-        await pool.query(
-            `INSERT INTO passwords ("userId", password) VALUES ($1, $2)`,
-            [id, bcrypt.hashSync("123456", 10)]
-        );
+        user = {
+            name: faker.name.findName(),
+            password: faker.internet.password(),
+            email: faker.internet.email(),
+        };
+        id = await createUser(user);
     });
 
     afterAll(async () => {
-        await pool.query(`DELETE FROM users WHERE id = $1;`, [id]);
-
-        await pool.query(`DELETE FROM passwords WHERE "userId" = $1;`, [id]);
-        pool.end();
+        await deleteUser(id);
     });
 
     it("should return 400 if email or password is missing", async () => {
-        const body = { email: "testonaldo@example.com" };
+        const body = { email: user.email };
         const result = await supertest(app).post("/sign-in").send(body);
 
         expect(result.status).toEqual(400);
@@ -34,8 +29,8 @@ describe("GET /sign-in", () => {
 
     it("should return 404 if credentials are not found", async () => {
         const body = {
-            email: "ThisUserDoesntExist@fail.com",
-            password: 123456,
+            email: faker.internet.email(),
+            password: faker.internet.password(),
         };
         const result = await supertest(app).post("/sign-in").send(body);
 
@@ -43,11 +38,7 @@ describe("GET /sign-in", () => {
     });
 
     it("should get an object with properties token and name if credentials are valid", async () => {
-        const body = {
-            email: "test@test.com",
-            password: "123456",
-        };
-        const result = await supertest(app).post("/sign-in").send(body);
+        const result = await supertest(app).post("/sign-in").send(user);
 
         expect(result.body).toHaveProperty("name");
         expect(result.body).toHaveProperty("token");
