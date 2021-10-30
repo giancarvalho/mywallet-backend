@@ -1,37 +1,36 @@
 import Joi from "joi";
 import { pool } from "../db/pool.js";
+import { findUser } from "../db/queries/users.js";
+import generateErrorMessage from "../factories/validationMessageFactory.js";
 
 async function validateNewUser(userData) {
     const joiValidation = userSchema.validate(userData);
-    const validation = { isInvalid: false, errorCode: null, errorMessage: "" };
+    let validation = { isInvalid: false };
 
     try {
         if (joiValidation.error) {
-            validation.isInvalid = true;
-            validation.errorCode = 400;
-            validation.errorMessage = joiValidation.error.details[0].message;
+            validation = generateErrorMessage(
+                400,
+                joiValidation.error.details[0].message
+            );
 
             return validation;
         }
 
-        const isUser = await pool.query(
-            "SELECT * FROM users WHERE email = $1",
-            [userData.email]
-        );
+        const isUser = await findUser(userData.email);
 
         if (isUser.rowCount > 0) {
-            validation.isInvalid = true;
-            validation.errorCode = 409;
-            validation.errorMessage = "This email is already registered.";
+            validation = generateErrorMessage(
+                409,
+                "This email is already registered."
+            );
 
             return validation;
         }
 
         return validation;
     } catch (error) {
-        validation.isInvalid = true;
-        validation.errorCode = 500;
-        validation.errorMessage = "Unknown error";
+        validation = generateErrorMessage(500, "Unknown error");
 
         return validation;
     }
