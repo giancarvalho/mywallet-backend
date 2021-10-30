@@ -25,4 +25,14 @@ async function deleteUser(id) {
     pool.end();
 }
 
-export { createUser, deleteUser };
+async function findUser(email) {
+    const result = await pool.query(
+        `SELECT users.id, users.name, passwords.password FROM users JOIN passwords ON users.id=passwords."userId" WHERE email = $1;
+`,
+        [email]
+    );
+
+    return result;
+}
+
+export { createUser, deleteUser, findUser };
