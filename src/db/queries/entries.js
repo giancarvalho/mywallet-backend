@@ -9,6 +9,14 @@ async function searchEntries(id) {
     return result;
 }
 
+async function searchEntry(id) {
+    const result = await pool.query("SELECT * FROM entries WHERE id = $1", [
+        id,
+    ]);
+
+    return result;
+}
+
 async function createEntry(id, entryData) {
     let { description, amount, date, type } = entryData;
 
@@ -18,4 +26,8 @@ async function createEntry(id, entryData) {
     );
 }
 
-export { searchEntries, createEntry };
+async function delEntry(id) {
+    await pool.query(`DELETE FROM entries WHERE id = $1`, [id]);
+}
+
+export { searchEntries, createEntry, delEntry, searchEntry };
