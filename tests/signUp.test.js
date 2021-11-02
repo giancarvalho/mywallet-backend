@@ -13,6 +13,7 @@ describe("POST /sign-up", () => {
         );
 
         await deleteUser(result.rows[0].id);
+        pool.end();
     });
 
     it("Should return a 400 status if body is invalid", async () => {

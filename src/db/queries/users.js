@@ -22,7 +22,8 @@ async function deleteUser(id) {
     await pool.query(`DELETE FROM users WHERE id = $1;`, [id]);
 
     await pool.query(`DELETE FROM passwords WHERE "userId" = $1;`, [id]);
-    pool.end();
+
+    await pool.query(`DELETE FROM tokens WHERE "userId" = $1;`, [id]);
 }
 
 async function findUser(email) {
