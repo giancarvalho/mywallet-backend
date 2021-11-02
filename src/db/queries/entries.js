@@ -20,10 +20,12 @@ async function searchEntry(id) {
 async function createEntry(id, entryData) {
     let { description, amount, date, type } = entryData;
 
-    await pool.query(
-        `INSERT INTO entries ("userId", description, amount, date, type) VALUES ($1, $2, $3, $4, $5);`,
+    const result = await pool.query(
+        `INSERT INTO entries ("userId", description, amount, date, type) VALUES ($1, $2, $3, $4, $5) RETURNING id;`,
         [id, description, amount * 100, date, type]
     );
+
+    return result.rows[0].id;
 }
 
 async function delEntry(id) {

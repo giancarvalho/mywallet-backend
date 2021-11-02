@@ -18,4 +18,8 @@ async function createToken(id, token) {
     ]);
 }
 
-export { getTokenData, createToken };
+async function deleteToken(token) {
+    await pool.query(`DELETE FROM tokens WHERE token = $1`, [token]);
+}
+
+export { getTokenData, createToken, deleteToken };

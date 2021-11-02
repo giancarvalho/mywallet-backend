@@ -5,6 +5,7 @@ import { validateEntryDeletion } from "../validations/deleteEntry.js";
 export default async function deleteEntry(req, res) {
     const token = req.headers.authorization?.replace("Bearer ", "");
     const id = req.query.id;
+
     if (!token) return res.sendStatus(401);
     let validation;
 

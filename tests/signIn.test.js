@@ -14,6 +14,7 @@ describe("GET /sign-in", () => {
 
     afterAll(async () => {
         await deleteUser(id);
+        pool.end();
     });
 
     it("should return 400 if email or password is missing", async () => {
