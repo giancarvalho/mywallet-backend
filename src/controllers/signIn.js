@@ -14,7 +14,7 @@ async function signIn(req, res) {
         const userSearch = await findUser(userData.email);
 
         if (userSearch.rowCount === 0) {
-            return res.status(404).message("User is not registered");
+            return res.status(404).send("User is not registered");
         }
 
         const user = userSearch.rows[0];
