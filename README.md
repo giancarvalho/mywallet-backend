@@ -40,7 +40,7 @@ Alternatively, you can use the api through the following URL: https://mywallet-a
 - DELETE /entries?id={entryId}
 
 
-For the entries endpoint you have to send a Bearer token that you get by signing in. For the POST /entries, the object needs to have the following keys: description (3 - 30 charcaters), amount (from $0.01 - 1 bi), type ('expense' or 'income'). 
+For the entries endpoint you have to send a Bearer token that you get by signing in. For the POST /entries, the object needs to have the following keys: description (3 - 30 charcaters), amount (from 0.01 - 1000000000), type ('expense' or 'income'). 
 
 
 ---
