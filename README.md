@@ -26,9 +26,8 @@ This is a full stack project. You are in the back-end repository, you can find t
 
 1) Clone this repository
 2) Create Database using dump.sql
-3) Create env. file
-4) Optionally, run tests with ```npm test``` 
-5) Run ```npm run start:dev```
+3) Optionally, run tests with ```npm test``` 
+4) Run ```npm run start:dev```
 
 ---
  This is the 14th project of Driven's Full-stack Web Dev Course.
