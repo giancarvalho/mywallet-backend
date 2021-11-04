@@ -29,5 +29,19 @@ This is a full stack project. You are in the back-end repository, you can find t
 3) Optionally, run tests with ```npm test``` 
 4) Run ```npm run start:dev```
 
+Alternatively, you can use the api through the following URL: https://mywallet-app-me.herokuapp.com
+
+### Endpoints
+
+- POST /sign-up
+- POST /sign-in
+- GET /entries
+- POST /entries
+- DELETE /entries?id={entryId}
+
+
+For the entries endpoint you have to send a Bearer token that you get by signing in. For the POST /entries, the object needs to have the following keys: description (3 - 30 charcaters), amount (from $0.01 - 1 bi), type ('expense' or 'income'). 
+
+
 ---
  This is the 14th project of Driven's Full-stack Web Dev Course.
